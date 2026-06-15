@@ -1,0 +1,55 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    bool duplicateFound = false;
+
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    int arr[n];
+
+    cout << "Enter array elements: ";
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    cout << "Duplicate elements are: ";
+
+    for (int i = 0; i < n; i++) {
+        bool alreadyPrinted = false;
+
+        for (int k = 0; k < i; k++) {
+            if (arr[i] == arr[k]) {
+                alreadyPrinted = true;
+                break;
+            }
+        }
+
+        if (alreadyPrinted) {
+            continue;
+        }
+
+        int count = 0;
+
+        for (int j = i; j < n; j++) {
+            if (arr[i] == arr[j]) {
+                count++;
+            }
+        }
+
+        if (count > 1) {
+            cout << arr[i] << " ";
+            duplicateFound = true;
+        }
+    }
+
+    if (!duplicateFound) {
+        cout << "No duplicate elements found.";
+    }
+
+    cout << endl;
+
+    return 0;
+}
