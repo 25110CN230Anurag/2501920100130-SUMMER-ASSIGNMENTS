@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+int maxFrequencyElement(vector<int>& arr) {
+    unordered_map<int, int> freq;
+    
+    for (int num : arr) {
+        freq[num]++;
+    }
+
+    int maxFreq = 0, element = arr[0];
+
+    for (auto pair : freq) {
+        if (pair.second > maxFreq) {
+            maxFreq = pair.second;
+            element = pair.first;
+        }
+    }
+
+    return element;
+}
+
+int main() {
+    vector<int> arr = {1, 3, 2, 1, 4, 1, 3, 3, 3};
+
+    cout << "Maximum Frequency Element: "
+         << maxFrequencyElement(arr) << endl;
+
+    return 0;
+}
