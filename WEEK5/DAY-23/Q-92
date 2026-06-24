@@ -1,0 +1,26 @@
+#include <iostream>
+#include <unordered_map>
+using namespace std;
+
+int main() {
+    string str;
+    cout << "Enter string: ";
+    cin >> str;
+
+    unordered_map<char, int> freq;
+    char maxChar;
+    int maxCount = 0;
+
+    for (char ch : str) {
+        freq[ch]++;
+        if (freq[ch] > maxCount) {
+            maxCount = freq[ch];
+            maxChar = ch;
+        }
+    }
+
+    cout << "Maximum occurring character: " << maxChar << endl;
+    cout << "Frequency: " << maxCount;
+
+    return 0;
+}
