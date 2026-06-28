@@ -1,0 +1,40 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main()
+{
+    string name;
+    int roll;
+    float m1, m2, m3, total, per;
+
+    cout << "Enter Roll No: ";
+    cin >> roll;
+    cin.ignore();
+
+    cout << "Enter Name: ";
+    getline(cin, name);
+
+    cout << "Enter Marks of Subject 1: ";
+    cin >> m1;
+    cout << "Enter Marks of Subject 2: ";
+    cin >> m2;
+    cout << "Enter Marks of Subject 3: ";
+    cin >> m3;
+
+    total = m1 + m2 + m3;
+    per = total / 3;
+
+    cout << "\n------ MARKSHEET ------";
+    cout << "\nRoll No    : " << roll;
+    cout << "\nName       : " << name;
+    cout << "\nTotal Marks: " << total;
+    cout << "\nPercentage : " << per << "%";
+
+    if (per >= 40)
+        cout << "\nResult     : PASS";
+    else
+        cout << "\nResult     : FAIL";
+
+    return 0;
+}
