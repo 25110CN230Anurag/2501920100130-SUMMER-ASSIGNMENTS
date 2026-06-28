@@ -1,0 +1,101 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Student
+{
+public:
+    int roll;
+    string name;
+    float marks;
+
+    void input()
+    {
+        cout << "Enter Roll Number: ";
+        cin >> roll;
+        cin.ignore();
+
+        cout << "Enter Name: ";
+        getline(cin, name);
+
+        cout << "Enter Marks: ";
+        cin >> marks;
+    }
+
+    void display()
+    {
+        cout << "\nRoll Number : " << roll;
+        cout << "\nName        : " << name;
+        cout << "\nMarks       : " << marks << endl;
+    }
+};
+
+int main()
+{
+    Student s[100];
+    int n = 0, choice, roll, i;
+    bool found;
+
+    do
+    {
+        cout << "\n===== Student Record Management System =====";
+        cout << "\n1. Add Student";
+        cout << "\n2. Display All Students";
+        cout << "\n3. Search Student";
+        cout << "\n4. Exit";
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            s[n].input();
+            n++;
+            break;
+
+        case 2:
+            if (n == 0)
+            {
+                cout << "No records found.\n";
+            }
+            else
+            {
+                for (i = 0; i < n; i++)
+                {
+                    cout << "\nStudent " << i + 1 << ":";
+                    s[i].display();
+                }
+            }
+            break;
+
+        case 3:
+            cout << "Enter Roll Number to Search: ";
+            cin >> roll;
+            found = false;
+
+            for (i = 0; i < n; i++)
+            {
+                if (s[i].roll == roll)
+                {
+                    s[i].display();
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+                cout << "Student not found.\n";
+            break;
+
+        case 4:
+            cout << "Exiting Program...\n";
+            break;
+
+        default:
+            cout << "Invalid Choice!\n";
+        }
+
+    } while (choice != 4);
+
+    return 0;
+}
