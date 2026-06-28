@@ -1,0 +1,40 @@
+#include <iostream>
+using namespace std;
+
+class Salary
+{
+public:
+    int empId;
+    float basic, hra, da, total;
+
+    void input()
+    {
+        cout << "Enter Employee ID: ";
+        cin >> empId;
+        cout << "Enter Basic Salary: ";
+        cin >> basic;
+
+        hra = basic * 0.20;
+        da = basic * 0.10;
+        total = basic + hra + da;
+    }
+
+    void display()
+    {
+        cout << "\nEmployee ID : " << empId;
+        cout << "\nBasic Salary: " << basic;
+        cout << "\nHRA         : " << hra;
+        cout << "\nDA          : " << da;
+        cout << "\nTotal Salary: " << total << endl;
+    }
+};
+
+int main()
+{
+    Salary s;
+
+    s.input();
+    s.display();
+
+    return 0;
+}
