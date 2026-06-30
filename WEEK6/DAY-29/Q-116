@@ -1,0 +1,145 @@
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Item {
+    int id;
+    string name;
+    int quantity;
+    double price;
+};
+
+class Inventory {
+private:
+    Item items[200];
+    int count;
+
+public:
+    Inventory() { count = 0; }
+
+    void addItem() {
+        Item it;
+        it.id = count + 1;
+        cout << "Enter item name: ";
+        cin.ignore();
+        getline(cin, it.name);
+        cout << "Enter quantity: ";
+        cin >> it.quantity;
+        cout << "Enter price per unit: ";
+        cin >> it.price;
+        items[count++] = it;
+        cout << "Item added with ID " << it.id << endl;
+    }
+
+    int findItem(int id) {
+        for (int i = 0; i < count; i++) {
+            if (items[i].id == id) return i;
+        }
+        return -1;
+    }
+
+    void displayItems() {
+        if (count == 0) {
+            cout << "No items in inventory.\n";
+            return;
+        }
+        cout << "\nID\tName\tQuantity\tPrice\tTotal Value\n";
+        for (int i = 0; i < count; i++) {
+            cout << items[i].id << "\t" << items[i].name << "\t"
+                 << items[i].quantity << "\t\t" << items[i].price << "\t"
+                 << (items[i].quantity * items[i].price) << endl;
+        }
+    }
+
+    void updateStock() {
+        int id, qty;
+        cout << "Enter item ID: ";
+        cin >> id;
+        int idx = findItem(id);
+        if (idx == -1) {
+            cout << "Item not found.\n";
+            return;
+        }
+        cout << "Enter quantity to add (negative to remove): ";
+        cin >> qty;
+        if (items[idx].quantity + qty < 0) {
+            cout << "Insufficient stock.\n";
+            return;
+        }
+        items[idx].quantity += qty;
+        cout << "Stock updated. New quantity: " << items[idx].quantity << endl;
+    }
+
+    void searchItem() {
+        string name;
+        cout << "Enter item name to search: ";
+        cin.ignore();
+        getline(cin, name);
+        for (int i = 0; i < count; i++) {
+            if (items[i].name == name) {
+                cout << "Found: ID " << items[i].id << ", Quantity: "
+                     << items[i].quantity << ", Price: " << items[i].price << endl;
+                return;
+            }
+        }
+        cout << "Item not found.\n";
+    }
+
+    void deleteItem() {
+        int id;
+        cout << "Enter item ID to delete: ";
+        cin >> id;
+        int idx = findItem(id);
+        if (idx == -1) {
+            cout << "Item not found.\n";
+            return;
+        }
+        for (int i = idx; i < count - 1; i++) {
+            items[i] = items[i + 1];
+        }
+        count--;
+        cout << "Item deleted successfully.\n";
+    }
+
+    void lowStockReport() {
+        int threshold;
+        cout << "Enter low stock threshold: ";
+        cin >> threshold;
+        bool found = false;
+        cout << "\nLow Stock Items:\n";
+        for (int i = 0; i < count; i++) {
+            if (items[i].quantity < threshold) {
+                cout << items[i].name << " - Quantity: " << items[i].quantity << endl;
+                found = true;
+            }
+        }
+        if (!found) cout << "No low stock items.\n";
+    }
+};
+
+int main() {
+    Inventory inv;
+    int choice;
+
+    do {
+        cout << "\n--- Inventory Management System ---\n";
+        cout << "1. Add Item\n2. Display Items\n3. Update Stock\n";
+        cout << "4. Search Item\n5. Delete Item\n6. Low Stock Report\n7. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: inv.addItem(); break;
+            case 2: inv.displayItems(); break;
+            case 3: inv.updateStock(); break;
+            case 4: inv.searchItem(); break;
+            case 5: inv.deleteItem(); break;
+            case 6: inv.lowStockReport(); break;
+            case 7: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice.\n";
+        }
+    } while (choice != 7);
+
+    return 0;
+}
