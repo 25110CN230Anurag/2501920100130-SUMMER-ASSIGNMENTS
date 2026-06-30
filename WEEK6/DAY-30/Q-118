@@ -1,0 +1,146 @@
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int MAX_BOOKS = 50;
+const int MAX_MEMBERS = 50;
+
+struct Book {
+    int id;
+    string title;
+    bool available;
+};
+
+struct Member {
+    int id;
+    string name;
+    int booksIssued;
+};
+
+class MiniLibrary {
+private:
+    Book books[MAX_BOOKS];
+    Member members[MAX_MEMBERS];
+    int bookCount, memberCount;
+
+public:
+    MiniLibrary() {
+        bookCount = 0;
+        memberCount = 0;
+    }
+
+    void addBook() {
+        Book b;
+        b.id = bookCount + 1;
+        cout << "Enter book title: ";
+        cin.ignore();
+        getline(cin, b.title);
+        b.available = true;
+        books[bookCount++] = b;
+        cout << "Book added with ID " << b.id << endl;
+    }
+
+    void addMember() {
+        Member m;
+        m.id = memberCount + 1;
+        cout << "Enter member name: ";
+        cin.ignore();
+        getline(cin, m.name);
+        m.booksIssued = 0;
+        members[memberCount++] = m;
+        cout << "Member added with ID " << m.id << endl;
+    }
+
+    void issueBook() {
+        int bookId, memberId;
+        cout << "Enter book ID: ";
+        cin >> bookId;
+        cout << "Enter member ID: ";
+        cin >> memberId;
+
+        int bIdx = -1, mIdx = -1;
+        for (int i = 0; i < bookCount; i++) if (books[i].id == bookId) bIdx = i;
+        for (int i = 0; i < memberCount; i++) if (members[i].id == memberId) mIdx = i;
+
+        if (bIdx == -1 || mIdx == -1) {
+            cout << "Invalid book or member ID.\n";
+            return;
+        }
+        if (!books[bIdx].available) {
+            cout << "Book is already issued.\n";
+            return;
+        }
+        books[bIdx].available = false;
+        members[mIdx].booksIssued++;
+        cout << "Book issued to " << members[mIdx].name << endl;
+    }
+
+    void returnBook() {
+        int bookId;
+        cout << "Enter book ID to return: ";
+        cin >> bookId;
+        for (int i = 0; i < bookCount; i++) {
+            if (books[i].id == bookId) {
+                if (books[i].available) {
+                    cout << "Book was not issued.\n";
+                } else {
+                    books[i].available = true;
+                    cout << "Book returned successfully.\n";
+                }
+                return;
+            }
+        }
+        cout << "Book not found.\n";
+    }
+
+    void displayBooks() {
+        if (bookCount == 0) {
+            cout << "No books available.\n";
+            return;
+        }
+        cout << "\nID\tTitle\tStatus\n";
+        for (int i = 0; i < bookCount; i++) {
+            cout << books[i].id << "\t" << books[i].title << "\t"
+                 << (books[i].available ? "Available" : "Issued") << endl;
+        }
+    }
+
+    void displayMembers() {
+        if (memberCount == 0) {
+            cout << "No members available.\n";
+            return;
+        }
+        cout << "\nID\tName\tBooks Issued\n";
+        for (int i = 0; i < memberCount; i++) {
+            cout << members[i].id << "\t" << members[i].name << "\t"
+                 << members[i].booksIssued << endl;
+        }
+    }
+};
+
+int main() {
+    MiniLibrary lib;
+    int choice;
+
+    do {
+        cout << "\n--- Mini Library System ---\n";
+        cout << "1. Add Book\n2. Add Member\n3. Issue Book\n4. Return Book\n";
+        cout << "5. Display Books\n6. Display Members\n7. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: lib.addBook(); break;
+            case 2: lib.addMember(); break;
+            case 3: lib.issueBook(); break;
+            case 4: lib.returnBook(); break;
+            case 5: lib.displayBooks(); break;
+            case 6: lib.displayMembers(); break;
+            case 7: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice.\n";
+        }
+    } while (choice != 7);
+
+    return 0;
+}
