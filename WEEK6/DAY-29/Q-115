@@ -1,0 +1,89 @@
+
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int choice;
+    string str, str2;
+
+    do {
+        cout << "\n--- Menu-Driven String Operations System ---\n";
+        cout << "1. Find Length\n2. Reverse String\n3. Convert to Uppercase\n";
+        cout << "4. Convert to Lowercase\n5. Check Palindrome\n";
+        cout << "6. Count Vowels & Consonants\n7. Concatenate Two Strings\n";
+        cout << "8. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 8) {
+            cout << "Exiting...\n";
+            break;
+        }
+
+        if (choice >= 1 && choice <= 6) {
+            cout << "Enter a string (no spaces): ";
+            cin >> str;
+        }
+
+        switch (choice) {
+            case 1:
+                cout << "Length: " << str.length() << endl;
+                break;
+            case 2: {
+                string rev = str;
+                reverse(rev.begin(), rev.end());
+                cout << "Reversed: " << rev << endl;
+                break;
+            }
+            case 3: {
+                string upper = str;
+                for (char &c : upper) c = toupper(c);
+                cout << "Uppercase: " << upper << endl;
+                break;
+            }
+            case 4: {
+                string lower = str;
+                for (char &c : lower) c = tolower(c);
+                cout << "Lowercase: " << lower << endl;
+                break;
+            }
+            case 5: {
+                string temp = str;
+                string rev = temp;
+                reverse(rev.begin(), rev.end());
+                if (temp == rev)
+                    cout << str << " is a palindrome.\n";
+                else
+                    cout << str << " is not a palindrome.\n";
+                break;
+            }
+            case 6: {
+                int vowels = 0, consonants = 0;
+                for (char c : str) {
+                    char lower = tolower(c);
+                    if (lower == 'a' || lower == 'e' || lower == 'i' ||
+                        lower == 'o' || lower == 'u') {
+                        vowels++;
+                    } else if (isalpha(c)) {
+                        consonants++;
+                    }
+                }
+                cout << "Vowels: " << vowels << ", Consonants: " << consonants << endl;
+                break;
+            }
+            case 7:
+                cout << "Enter first string: ";
+                cin >> str;
+                cout << "Enter second string: ";
+                cin >> str2;
+                cout << "Concatenated: " << str + str2 << endl;
+                break;
+            default:
+                cout << "Invalid choice.\n";
+        }
+    } while (choice != 8);
+
+    return 0;
+}
