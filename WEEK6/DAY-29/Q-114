@@ -1,0 +1,126 @@
+
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+const int MAX_SIZE = 100;
+
+class ArrayOperations {
+private:
+    int arr[MAX_SIZE];
+    int size;
+
+public:
+    ArrayOperations() { size = 0; }
+
+    void inputArray() {
+        cout << "Enter number of elements: ";
+        cin >> size;
+        if (size > MAX_SIZE || size <= 0) {
+            cout << "Invalid size.\n";
+            size = 0;
+            return;
+        }
+        cout << "Enter " << size << " elements: ";
+        for (int i = 0; i < size; i++) cin >> arr[i];
+    }
+
+    void displayArray() {
+        if (size == 0) {
+            cout << "Array is empty.\n";
+            return;
+        }
+        cout << "Array elements: ";
+        for (int i = 0; i < size; i++) cout << arr[i] << " ";
+        cout << endl;
+    }
+
+    void sortArray() {
+        if (size == 0) {
+            cout << "Array is empty.\n";
+            return;
+        }
+        sort(arr, arr + size);
+        cout << "Array sorted successfully.\n";
+        displayArray();
+    }
+
+    void reverseArray() {
+        if (size == 0) {
+            cout << "Array is empty.\n";
+            return;
+        }
+        reverse(arr, arr + size);
+        cout << "Array reversed successfully.\n";
+        displayArray();
+    }
+
+    void findMaxMin() {
+        if (size == 0) {
+            cout << "Array is empty.\n";
+            return;
+        }
+        int maxVal = arr[0], minVal = arr[0];
+        for (int i = 1; i < size; i++) {
+            if (arr[i] > maxVal) maxVal = arr[i];
+            if (arr[i] < minVal) minVal = arr[i];
+        }
+        cout << "Maximum: " << maxVal << ", Minimum: " << minVal << endl;
+    }
+
+    void sumAverage() {
+        if (size == 0) {
+            cout << "Array is empty.\n";
+            return;
+        }
+        int sum = 0;
+        for (int i = 0; i < size; i++) sum += arr[i];
+        double avg = (double)sum / size;
+        cout << "Sum: " << sum << ", Average: " << avg << endl;
+    }
+
+    void searchElement() {
+        if (size == 0) {
+            cout << "Array is empty.\n";
+            return;
+        }
+        int key;
+        cout << "Enter element to search: ";
+        cin >> key;
+        for (int i = 0; i < size; i++) {
+            if (arr[i] == key) {
+                cout << "Element found at index " << i << endl;
+                return;
+            }
+        }
+        cout << "Element not found.\n";
+    }
+};
+
+int main() {
+    ArrayOperations ops;
+    int choice;
+
+    do {
+        cout << "\n--- Menu-Driven Array Operations System ---\n";
+        cout << "1. Input Array\n2. Display Array\n3. Sort Array\n";
+        cout << "4. Reverse Array\n5. Find Max/Min\n6. Sum & Average\n";
+        cout << "7. Search Element\n8. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: ops.inputArray(); break;
+            case 2: ops.displayArray(); break;
+            case 3: ops.sortArray(); break;
+            case 4: ops.reverseArray(); break;
+            case 5: ops.findMaxMin(); break;
+            case 6: ops.sumAverage(); break;
+            case 7: ops.searchElement(); break;
+            case 8: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice.\n";
+        }
+    } while (choice != 8);
+
+    return 0;
+}
