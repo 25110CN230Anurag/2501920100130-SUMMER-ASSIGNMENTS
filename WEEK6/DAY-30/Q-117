@@ -1,0 +1,122 @@
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int MAX_STUDENTS = 100;
+const int MAX_SUBJECTS = 5;
+
+struct Student {
+    int rollNo;
+    string name;
+    int marks[MAX_SUBJECTS];
+    int totalMarks;
+    double percentage;
+};
+
+class StudentRecordSystem {
+private:
+    Student students[MAX_STUDENTS];
+    int count;
+
+public:
+    StudentRecordSystem() { count = 0; }
+
+    void addStudent() {
+        Student s;
+        s.rollNo = count + 1;
+        cout << "Enter student name: ";
+        cin.ignore();
+        getline(cin, s.name);
+        s.totalMarks = 0;
+        cout << "Enter marks for " << MAX_SUBJECTS << " subjects:\n";
+        for (int i = 0; i < MAX_SUBJECTS; i++) {
+            cout << "Subject " << (i + 1) << ": ";
+            cin >> s.marks[i];
+            s.totalMarks += s.marks[i];
+        }
+        s.percentage = (double)s.totalMarks / MAX_SUBJECTS;
+        students[count++] = s;
+        cout << "Student added with Roll No " << s.rollNo << endl;
+    }
+
+    void displayStudents() {
+        if (count == 0) {
+            cout << "No student records available.\n";
+            return;
+        }
+        cout << "\nRoll No\tName\tTotal\tPercentage\n";
+        for (int i = 0; i < count; i++) {
+            cout << students[i].rollNo << "\t" << students[i].name << "\t"
+                 << students[i].totalMarks << "\t" << students[i].percentage << "%\n";
+        }
+    }
+
+    void searchStudent() {
+        string name;
+        cout << "Enter name to search: ";
+        cin.ignore();
+        getline(cin, name);
+        for (int i = 0; i < count; i++) {
+            if (students[i].name == name) {
+                cout << "Roll No: " << students[i].rollNo << endl;
+                for (int j = 0; j < MAX_SUBJECTS; j++) {
+                    cout << "Subject " << (j + 1) << ": " << students[i].marks[j] << endl;
+                }
+                cout << "Total: " << students[i].totalMarks
+                     << ", Percentage: " << students[i].percentage << "%\n";
+                return;
+            }
+        }
+        cout << "Student not found.\n";
+    }
+
+    void topperReport() {
+        if (count == 0) {
+            cout << "No student records available.\n";
+            return;
+        }
+        int topIdx = 0;
+        for (int i = 1; i < count; i++) {
+            if (students[i].totalMarks > students[topIdx].totalMarks) topIdx = i;
+        }
+        cout << "Topper: " << students[topIdx].name << " with "
+             << students[topIdx].totalMarks << " marks ("
+             << students[topIdx].percentage << "%)\n";
+    }
+
+    void averagePercentage() {
+        if (count == 0) {
+            cout << "No student records available.\n";
+            return;
+        }
+        double total = 0;
+        for (int i = 0; i < count; i++) total += students[i].percentage;
+        cout << "Class Average Percentage: " << (total / count) << "%\n";
+    }
+};
+
+int main() {
+    StudentRecordSystem system;
+    int choice;
+
+    do {
+        cout << "\n--- Student Record System (Arrays & Strings) ---\n";
+        cout << "1. Add Student\n2. Display Students\n3. Search Student\n";
+        cout << "4. Topper Report\n5. Average Percentage\n6. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: system.addStudent(); break;
+            case 2: system.displayStudents(); break;
+            case 3: system.searchStudent(); break;
+            case 4: system.topperReport(); break;
+            case 5: system.averagePercentage(); break;
+            case 6: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice.\n";
+        }
+    } while (choice != 6);
+
+    return 0;
+}
