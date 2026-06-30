@@ -1,0 +1,147 @@
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int MAX_EMPLOYEES = 100;
+
+struct Employee {
+    int id;
+    string name;
+    string department;
+    double salary;
+};
+
+class EmployeeManager {
+private:
+    Employee employees[MAX_EMPLOYEES];
+    int count;
+
+public:
+    EmployeeManager() { count = 0; }
+
+    void addEmployee() {
+        Employee e;
+        e.id = count + 1;
+        cout << "Enter employee name: ";
+        cin.ignore();
+        getline(cin, e.name);
+        cout << "Enter department: ";
+        getline(cin, e.department);
+        cout << "Enter salary: ";
+        cin >> e.salary;
+        employees[count++] = e;
+        cout << "Employee added with ID " << e.id << endl;
+    }
+
+    void displayEmployees() {
+        if (count == 0) {
+            cout << "No employee records available.\n";
+            return;
+        }
+        cout << "\nID\tName\tDepartment\tSalary\n";
+        for (int i = 0; i < count; i++) {
+            cout << employees[i].id << "\t" << employees[i].name << "\t"
+                 << employees[i].department << "\t" << employees[i].salary << endl;
+        }
+    }
+
+    void searchEmployee() {
+        string name;
+        cout << "Enter name to search: ";
+        cin.ignore();
+        getline(cin, name);
+        for (int i = 0; i < count; i++) {
+            if (employees[i].name == name) {
+                cout << "ID: " << employees[i].id << ", Department: "
+                     << employees[i].department << ", Salary: " << employees[i].salary << endl;
+                return;
+            }
+        }
+        cout << "Employee not found.\n";
+    }
+
+    void updateSalary() {
+        int id;
+        double newSalary;
+        cout << "Enter employee ID: ";
+        cin >> id;
+        for (int i = 0; i < count; i++) {
+            if (employees[i].id == id) {
+                cout << "Enter new salary: ";
+                cin >> newSalary;
+                employees[i].salary = newSalary;
+                cout << "Salary updated successfully.\n";
+                return;
+            }
+        }
+        cout << "Employee not found.\n";
+    }
+
+    void deleteEmployee() {
+        int id;
+        cout << "Enter employee ID to delete: ";
+        cin >> id;
+        for (int i = 0; i < count; i++) {
+            if (employees[i].id == id) {
+                for (int j = i; j < count - 1; j++) {
+                    employees[j] = employees[j + 1];
+                }
+                count--;
+                cout << "Employee deleted successfully.\n";
+                return;
+            }
+        }
+        cout << "Employee not found.\n";
+    }
+
+    void departmentWiseReport() {
+        string dept;
+        cout << "Enter department name: ";
+        cin.ignore();
+        getline(cin, dept);
+        bool found = false;
+        double totalSalary = 0;
+        int empCount = 0;
+        cout << "\nEmployees in " << dept << ":\n";
+        for (int i = 0; i < count; i++) {
+            if (employees[i].department == dept) {
+                cout << employees[i].name << " - Salary: " << employees[i].salary << endl;
+                totalSalary += employees[i].salary;
+                empCount++;
+                found = true;
+            }
+        }
+        if (!found) {
+            cout << "No employees found in this department.\n";
+        } else {
+            cout << "Total Employees: " << empCount << ", Total Salary: " << totalSalary << endl;
+        }
+    }
+};
+
+int main() {
+    EmployeeManager manager;
+    int choice;
+
+    do {
+        cout << "\n--- Mini Employee Management System ---\n";
+        cout << "1. Add Employee\n2. Display Employees\n3. Search Employee\n";
+        cout << "4. Update Salary\n5. Delete Employee\n6. Department Report\n7. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: manager.addEmployee(); break;
+            case 2: manager.displayEmployees(); break;
+            case 3: manager.searchEmployee(); break;
+            case 4: manager.updateSalary(); break;
+            case 5: manager.deleteEmployee(); break;
+            case 6: manager.departmentWiseReport(); break;
+            case 7: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice.\n";
+        }
+    } while (choice != 7);
+
+    return 0;
+}
