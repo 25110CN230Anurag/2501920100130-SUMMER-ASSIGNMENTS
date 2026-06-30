@@ -1,0 +1,124 @@
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Contact {
+    string name;
+    string phone;
+    string email;
+};
+
+class ContactManager {
+private:
+    Contact contacts[200];
+    int count;
+
+public:
+    ContactManager() { count = 0; }
+
+    void addContact() {
+        if (count >= 200) {
+            cout << "Contact list full.\n";
+            return;
+        }
+        Contact c;
+        cout << "Enter name: ";
+        cin.ignore();
+        getline(cin, c.name);
+        cout << "Enter phone number: ";
+        getline(cin, c.phone);
+        cout << "Enter email: ";
+        getline(cin, c.email);
+        contacts[count++] = c;
+        cout << "Contact added successfully.\n";
+    }
+
+    void displayContacts() {
+        if (count == 0) {
+            cout << "No contacts available.\n";
+            return;
+        }
+        cout << "\nName\tPhone\tEmail\n";
+        for (int i = 0; i < count; i++) {
+            cout << contacts[i].name << "\t" << contacts[i].phone << "\t"
+                 << contacts[i].email << endl;
+        }
+    }
+
+    void searchContact() {
+        string name;
+        cout << "Enter name to search: ";
+        cin.ignore();
+        getline(cin, name);
+        for (int i = 0; i < count; i++) {
+            if (contacts[i].name == name) {
+                cout << "Found: " << contacts[i].name << ", Phone: "
+                     << contacts[i].phone << ", Email: " << contacts[i].email << endl;
+                return;
+            }
+        }
+        cout << "Contact not found.\n";
+    }
+
+    void deleteContact() {
+        string name;
+        cout << "Enter name to delete: ";
+        cin.ignore();
+        getline(cin, name);
+        for (int i = 0; i < count; i++) {
+            if (contacts[i].name == name) {
+                for (int j = i; j < count - 1; j++) {
+                    contacts[j] = contacts[j + 1];
+                }
+                count--;
+                cout << "Contact deleted successfully.\n";
+                return;
+            }
+        }
+        cout << "Contact not found.\n";
+    }
+
+    void updateContact() {
+        string name;
+        cout << "Enter name to update: ";
+        cin.ignore();
+        getline(cin, name);
+        for (int i = 0; i < count; i++) {
+            if (contacts[i].name == name) {
+                cout << "Enter new phone number: ";
+                getline(cin, contacts[i].phone);
+                cout << "Enter new email: ";
+                getline(cin, contacts[i].email);
+                cout << "Contact updated successfully.\n";
+                return;
+            }
+        }
+        cout << "Contact not found.\n";
+    }
+};
+
+int main() {
+    ContactManager manager;
+    int choice;
+
+    do {
+        cout << "\n--- Contact Management System ---\n";
+        cout << "1. Add Contact\n2. Display Contacts\n3. Search Contact\n";
+        cout << "4. Update Contact\n5. Delete Contact\n6. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: manager.addContact(); break;
+            case 2: manager.displayContacts(); break;
+            case 3: manager.searchContact(); break;
+            case 4: manager.updateContact(); break;
+            case 5: manager.deleteContact(); break;
+            case 6: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice.\n";
+        }
+    } while (choice != 6);
+
+    return 0;
+}
