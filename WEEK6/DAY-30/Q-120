@@ -1,0 +1,170 @@
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int MAX_STUDENTS = 50;
+const int MAX_COURSES = 5;
+
+string studentNames[MAX_STUDENTS];
+string courseNames[MAX_COURSES] = {"Math", "Physics", "Chemistry", "English", "Computer Science"};
+int marks[MAX_STUDENTS][MAX_COURSES];
+int studentCount = 0;
+
+
+void addStudent();
+void displayAllStudents();
+void displayStudentDetails(int index);
+int findStudentIndex(const string &name);
+char calculateGrade(double percentage);
+double calculatePercentage(int index);
+int calculateTotal(int index);
+void searchStudent();
+void topPerformer();
+void courseAverage();
+string toUpperCase(const string &str);
+
+int main() {
+    int choice;
+
+    do {
+        cout << "\n--- Student Course Enrollment & Grading System ---\n";
+        cout << "1. Add Student\n2. Display All Students\n3. Search Student\n";
+        cout << "4. Top Performer\n5. Course-wise Average\n6. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: addStudent(); break;
+            case 2: displayAllStudents(); break;
+            case 3: searchStudent(); break;
+            case 4: topPerformer(); break;
+            case 5: courseAverage(); break;
+            case 6: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice.\n";
+        }
+    } while (choice != 6);
+
+    return 0;
+}
+
+void addStudent() {
+    if (studentCount >= MAX_STUDENTS) {
+        cout << "Student list is full.\n";
+        return;
+    }
+    cout << "Enter student name: ";
+    cin.ignore();
+    getline(cin, studentNames[studentCount]);
+
+    cout << "Enter marks for " << MAX_COURSES << " courses:\n";
+    for (int i = 0; i < MAX_COURSES; i++) {
+        cout << courseNames[i] << ": ";
+        cin >> marks[studentCount][i];
+    }
+    studentCount++;
+    cout << "Student added successfully.\n";
+}
+
+int calculateTotal(int index) {
+    int total = 0;
+    for (int i = 0; i < MAX_COURSES; i++) {
+        total += marks[index][i];
+    }
+    return total;
+}
+
+double calculatePercentage(int index) {
+    return (double)calculateTotal(index) / MAX_COURSES;
+}
+
+char calculateGrade(double percentage) {
+    if (percentage >= 90) return 'A';
+    else if (percentage >= 75) return 'B';
+    else if (percentage >= 60) return 'C';
+    else if (percentage >= 40) return 'D';
+    else return 'F';
+}
+
+string toUpperCase(const string &str) {
+    string result = str;
+    for (char &c : result) c = toupper(c);
+    return result;
+}
+
+void displayStudentDetails(int index) {
+    cout << "\nName: " << studentNames[index] << endl;
+    for (int i = 0; i < MAX_COURSES; i++) {
+        cout << courseNames[i] << ": " << marks[index][i] << endl;
+    }
+    double percentage = calculatePercentage(index);
+    cout << "Total: " << calculateTotal(index) << endl;
+    cout << "Percentage: " << percentage << "%\n";
+    cout << "Grade: " << calculateGrade(percentage) << endl;
+}
+
+void displayAllStudents() {
+    if (studentCount == 0) {
+        cout << "No students enrolled.\n";
+        return;
+    }
+    for (int i = 0; i < studentCount; i++) {
+        displayStudentDetails(i);
+        cout << "------------------------\n";
+    }
+}
+
+int findStudentIndex(const string &name) {
+    string upperName = toUpperCase(name);
+    for (int i = 0; i < studentCount; i++) {
+        if (toUpperCase(studentNames[i]) == upperName) return i;
+    }
+    return -1;
+}
+
+void searchStudent() {
+    string name;
+    cout << "Enter student name to search: ";
+    cin.ignore();
+    getline(cin, name);
+    int idx = findStudentIndex(name);
+    if (idx == -1) {
+        cout << "Student not found.\n";
+    } else {
+        displayStudentDetails(idx);
+    }
+}
+
+void topPerformer() {
+    if (studentCount == 0) {
+        cout << "No students enrolled.\n";
+        return;
+    }
+    int topIdx = 0;
+    int topTotal = calculateTotal(0);
+    for (int i = 1; i < studentCount; i++) {
+        int total = calculateTotal(i);
+        if (total > topTotal) {
+            topTotal = total;
+            topIdx = i;
+        }
+    }
+    cout << "\nTop Performer:\n";
+    displayStudentDetails(topIdx);
+}
+
+void courseAverage() {
+    if (studentCount == 0) {
+        cout << "No students enrolled.\n";
+        return;
+    }
+    cout << "\nCourse-wise Average:\n";
+    for (int c = 0; c < MAX_COURSES; c++) {
+        int sum = 0;
+        for (int s = 0; s < studentCount; s++) {
+            sum += marks[s][c];
+        }
+        double avg = (double)sum / studentCount;
+        cout << courseNames[c] << ": " << avg << endl;
+    }
+}
