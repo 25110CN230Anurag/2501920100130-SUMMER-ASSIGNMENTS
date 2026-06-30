@@ -1,0 +1,128 @@
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Account {
+    int accNo;
+    string name;
+    double balance;
+};
+
+class Bank {
+private:
+    Account accounts[100];
+    int count;
+
+public:
+    Bank() { count = 0; }
+
+    void createAccount() {
+        Account a;
+        a.accNo = count + 1001;
+        cout << "Enter account holder name: ";
+        cin.ignore();
+        getline(cin, a.name);
+        cout << "Enter initial deposit amount: ";
+        cin >> a.balance;
+        accounts[count++] = a;
+        cout << "Account created with Account No: " << a.accNo << endl;
+    }
+
+    int findAccount(int accNo) {
+        for (int i = 0; i < count; i++) {
+            if (accounts[i].accNo == accNo) return i;
+        }
+        return -1;
+    }
+
+    void deposit() {
+        int accNo;
+        double amount;
+        cout << "Enter account number: ";
+        cin >> accNo;
+        int idx = findAccount(accNo);
+        if (idx == -1) {
+            cout << "Account not found.\n";
+            return;
+        }
+        cout << "Enter deposit amount: ";
+        cin >> amount;
+        if (amount <= 0) {
+            cout << "Invalid amount.\n";
+            return;
+        }
+        accounts[idx].balance += amount;
+        cout << "Deposit successful. New balance: " << accounts[idx].balance << endl;
+    }
+
+    void withdraw() {
+        int accNo;
+        double amount;
+        cout << "Enter account number: ";
+        cin >> accNo;
+        int idx = findAccount(accNo);
+        if (idx == -1) {
+            cout << "Account not found.\n";
+            return;
+        }
+        cout << "Enter withdrawal amount: ";
+        cin >> amount;
+        if (amount <= 0 || amount > accounts[idx].balance) {
+            cout << "Invalid amount or insufficient balance.\n";
+            return;
+        }
+        accounts[idx].balance -= amount;
+        cout << "Withdrawal successful. New balance: " << accounts[idx].balance << endl;
+    }
+
+    void checkBalance() {
+        int accNo;
+        cout << "Enter account number: ";
+        cin >> accNo;
+        int idx = findAccount(accNo);
+        if (idx == -1) {
+            cout << "Account not found.\n";
+            return;
+        }
+        cout << "Account Holder: " << accounts[idx].name << endl;
+        cout << "Balance: " << accounts[idx].balance << endl;
+    }
+
+    void displayAll() {
+        if (count == 0) {
+            cout << "No accounts available.\n";
+            return;
+        }
+        cout << "\nAcc No\tName\tBalance\n";
+        for (int i = 0; i < count; i++) {
+            cout << accounts[i].accNo << "\t" << accounts[i].name << "\t"
+                 << accounts[i].balance << endl;
+        }
+    }
+};
+
+int main() {
+    Bank bank;
+    int choice;
+
+    do {
+        cout << "\n--- Bank Account System ---\n";
+        cout << "1. Create Account\n2. Deposit\n3. Withdraw\n";
+        cout << "4. Check Balance\n5. Display All Accounts\n6. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: bank.createAccount(); break;
+            case 2: bank.deposit(); break;
+            case 3: bank.withdraw(); break;
+            case 4: bank.checkBalance(); break;
+            case 5: bank.displayAll(); break;
+            case 6: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice.\n";
+        }
+    } while (choice != 6);
+
+    return 0;
+}
